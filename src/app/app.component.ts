@@ -3,6 +3,8 @@ import { Employee } from './employee';
 import { EmployeeService } from './employee.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
+import { Subject, interval } from 'rxjs';
+import { map, debounce } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -14,10 +16,17 @@ export class AppComponent implements OnInit {
   public editEmployee: Employee;
   public deleteEmployee: Employee;
 
+  // private subject = new Subject<string>();
+
   constructor(private employeeService: EmployeeService) {}
 
   ngOnInit(): void {
     this.getEmployees();
+
+    // this.subject.pipe(
+    //   debounce(() => interval(300)))
+    //   .subscribe((str: string) =>
+    //   this.filteredEmployees = this.employees.filter(e => e.name.toLowerCase().includes(str.toLowerCase())));
   }
 
   public getEmployees(): void {
@@ -55,6 +64,27 @@ export class AppComponent implements OnInit {
       (response: void) => this.getEmployees(),
       (error: HttpErrorResponse) => alert(error.message)
     );
+  }
+
+  // search(evt) {
+  //   this.subject.next(evt.target.value);
+  // }
+
+  public searchEmployees(key: string): void {
+    const results: Employee[] = [];
+    for (const e of this.employees) {
+      if (e.name.toLowerCase().includes(key.toLowerCase())
+      || e.email.toLowerCase().includes(key.toLowerCase())
+      || e.phone.toLowerCase().includes(key.toLowerCase())
+      || e.jobTitle.toLowerCase().includes(key.toLowerCase())) {
+        results.push(e);
+      }
+    }
+    if (!key) {
+      this.getEmployees();
+    } else {
+      this.employees = results;
+    }
   }
 
   public onOpenModal(employee: Employee, mode: string): void {

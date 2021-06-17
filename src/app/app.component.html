@@ -11,8 +11,9 @@
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
-      <input type="search" name="key" id="searchName" class="form-control mr-sm-2" placeholder="Search employees..."
-        required>
+      <!-- <input (input)="searchEmployees($event)" type="search" name="key" id="searchName" class="form-control mr-sm-2" placeholder="Search employees..."
+        required> -->
+      <input (ngModelChange)="searchEmployees(key.value)" #key="ngModel" ngModel type="search" name="key" id="searchName" class="form-control mr-sm-2" placeholder="Search employees..." required>
     </form>
   </div>
 </nav>
