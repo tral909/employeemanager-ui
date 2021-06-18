@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Employee } from './employee';
 import { EmployeeService } from './employee.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -11,12 +11,12 @@ import { map, debounce } from 'rxjs/operators';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   public employees: Employee[];
   public editEmployee: Employee;
   public deleteEmployee: Employee;
 
-  // private subject = new Subject<string>();
+  private subject = new Subject<string>();
 
   constructor(private employeeService: EmployeeService) {}
 
@@ -27,6 +27,10 @@ export class AppComponent implements OnInit {
     //   debounce(() => interval(300)))
     //   .subscribe((str: string) =>
     //   this.filteredEmployees = this.employees.filter(e => e.name.toLowerCase().includes(str.toLowerCase())));
+  }
+
+  ngOnDestroy(): void {
+    // this.subject.unsubscribe();
   }
 
   public getEmployees(): void {
